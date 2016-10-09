@@ -315,8 +315,8 @@
                 if ($(el).attr("data-url")) {
                     /* TODO save xpath */
                     updateXPath($(el).attr("data-url"), {"site_xpath": $txt.val()}, function (response) {
-                        $lbl.show().text(response.site.site_xpath);
-                        $txt.hide().val(response.site.site_xpath);
+                        $lbl.show().text(response.site.preference.xpath_1);
+                        $txt.hide().val(response.site.preference.xpath_1);
                     }, function (response) {
 
                     });

@@ -55,7 +55,9 @@ class SiteRepository implements SiteContract
 
     public function updateSite($id, $options)
     {
-        $options['site_url'] = $this->removeGlobalWebTracking($options['site_url']);
+        if(isset($options['site_url'])){
+            $options['site_url'] = $this->removeGlobalWebTracking($options['site_url']);
+        }
         $site = $this->getSite($id);
         $site->update($options);
         return $site;

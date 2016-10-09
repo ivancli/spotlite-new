@@ -14,6 +14,7 @@ use App\Contracts\Repository\Product\Site\SiteContract;
 use App\Exceptions\ValidationException;
 use App\Filters\QueryFilter;
 use App\Http\Controllers\Controller;
+use App\Libraries\CommonFunctions;
 use App\Models\Domain;
 use App\Validators\Crawler\Site\StoreValidator;
 use App\Validators\Crawler\Site\UpdateValidator;
@@ -23,6 +24,8 @@ use Invigor\Crawler\Contracts\ParserInterface;
 
 class SiteController extends Controller
 {
+    use CommonFunctions;
+
     protected $siteRepo;
     protected $queryFilter;
     protected $domainRepo;
@@ -203,10 +206,16 @@ class SiteController extends Controller
     public function update(Request $request, $site_id)
     {
         $input = $request->all();
+        $site = $this->siteRepo->getSite($site_id);
+        $preference = $site->preference;
         if (isset($input['site_xpath']) && strlen($input['site_xpath']) == 0) {
-            $input['site_xpath'] = null;
+            $preference->xpath_1 = null;
+            $preference->save();
+        }else{
+            $preference->xpath_1 = $input['site_xpath'];
+            $preference->save();
         }
-        $site = $this->siteRepo->updateSite($site_id, $input);
+//        $site = $this->siteRepo->updateSite($site_id, $input);
         if ($site->status == 'null_xpath') {
             $site->statusWaiting();
         }
